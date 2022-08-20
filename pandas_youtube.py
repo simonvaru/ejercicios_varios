@@ -24,6 +24,6 @@ new_row = {"Name": "Belisario", "Height": 0.3, "Weight": 0.150}
 data = data.append(new_row, ignore_index = True)
 print(f"\nDataframe Data + New Row Belisario:\n{data}")
 
-# bmi_B = data["Weight"][5]/(data["Height"][5]**2)
-# data.at[5, "BMI"] = bmi_B
-# print(f"\nDataframe Data + BMI of Belisario:\n{data}")
+bmi_B = data["Weight"][5]/(data["Height"][5]**2)
+data.at[5, "BMI"] = bmi_B
+print(f"\nDataframe Data + BMI of Belisario:\n{data}")
