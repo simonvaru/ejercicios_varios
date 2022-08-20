@@ -27,3 +27,5 @@ print(f"\nDataframe Data + New Row Belisario:\n{data}")
 bmi_B = data["Weight"][5]/(data["Height"][5]**2)
 data.at[5, "BMI"] = bmi_B
 print(f"\nDataframe Data + BMI of Belisario:\n{data}")
+
+print("Recordar precaucion con Elbrian.")
