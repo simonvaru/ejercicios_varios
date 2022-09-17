@@ -53,13 +53,8 @@ import random
 ######################
 width = 900
 height = 600
-n_tress = 30
+n_trees = 30
 ground_level = height -100
-
-###########
-##colours##
-###########
-green, light_green, brown = (40, 185, 40), (25, 220, 0), (30,65, 155)
 
 ###############
 ##blank image##
@@ -73,42 +68,55 @@ cv.rectangle(bg, (width, 0), (0, ground_level), (225, 225, 95), -1)
 
 ################
 class Tree(object):
-    def __init__(self, image, location):
+    def __init__(self, image):
         self.img = image
-        self.loc =location
-        self.ht = 300
+        self.loc =int(np.random.choice(range(900), 1))
+        self.ht = int(np.random.choice(range(200, 350), 1))
         self.radius = 50
-        self.scale = 2
+        self.scale = np.random.choice(np.linspace(0.5, 2.5, num=8), 1)
+        
+    ###########
+    ##colours##
+    ###########    
+    def generate_colours(self):
+        green = (0, random.randint(130, 200), 0)
+        light_green = (35, random.randint(200, 250), 35)
+        brown = random.choice([(2, 30, 85), (5, 55, 120), (0, 70, 140)])
+        return green, light_green, brown
+        
     def draw(self):
-        small_radius = self.radius*self.scale-20*self.scale
+        small_radius = int(self.radius*self.scale-20*self.scale)
+        green, light_green, brown = self.generate_colours()
         #leafs=> cv.circle(image, center_coordinates, radius, color, thickness)
-        cv.circle(self.img, (self.loc, ground_level-self.ht), self.radius*self.scale, green, -1)
-        cv.circle(self.img, (self.loc-45*self.scale, ground_level-self.ht + small_radius), small_radius, green, -1)
-        cv.circle(self.img, (self.loc+45*self.scale, ground_level-self.ht + small_radius), small_radius, green, -1)
+        cv.circle(self.img, (self.loc, ground_level-self.ht), int(self.radius*self.scale), green, -1)
+        cv.circle(self.img, (self.loc-int(45*self.scale), ground_level-self.ht + small_radius), small_radius, green, -1)
+        cv.circle(self.img, (self.loc+int(45*self.scale), ground_level-self.ht + small_radius), small_radius, green, -1)
         #trunk=> cv.line(image, start_point, end_point, color, thickness) 
-        cv.line(self.img, (self.loc, ground_level), (self.loc, ground_level-self.ht), brown, 20*self.scale)
-        cv.line(self.img, (self.loc, ground_level-self.ht + 75*self.scale), (self.loc-45*self.scale, ground_level-self.ht + small_radius), brown, 5*self.scale)
-        cv.line(self.img, (self.loc, ground_level-self.ht + 75*self.scale), (self.loc+45*self.scale, ground_level-self.ht + small_radius), brown, 5*self.scale)
+        cv.line(self.img, (self.loc, ground_level), (self.loc, ground_level-self.ht), brown, int(20*self.scale))
+        cv.line(self.img, (self.loc, ground_level-self.ht + int(75*self.scale)), (self.loc-int(45*self.scale), ground_level-self.ht + small_radius), brown, int(5*self.scale))
+        cv.line(self.img, (self.loc, ground_level-self.ht + int(75*self.scale)), (self.loc+int(45*self.scale), ground_level-self.ht + small_radius), brown, int(5*self.scale))
         #leafs-shadows
-        cv.circle(self.img, (self.loc, ground_level-self.ht), self.radius*self.scale-10*self.scale, light_green, -1)
-        cv.circle(self.img, (self.loc-45*self.scale, ground_level-self.ht + small_radius), small_radius-10*self.scale, light_green, -1)
-        cv.circle(self.img, (self.loc+45*self.scale, ground_level-self.ht + small_radius), small_radius-10*self.scale, light_green, -1)
+        cv.circle(self.img, (self.loc, ground_level-self.ht), int(self.radius*self.scale-10*self.scale), light_green, -1)
+        cv.circle(self.img, (self.loc-int(45*self.scale), ground_level-self.ht + small_radius), small_radius-int(10*self.scale), light_green, -1)
+        cv.circle(self.img, (self.loc+int(45*self.scale), ground_level-self.ht + small_radius), small_radius-int(10*self.scale), light_green, -1)
+        ###############
+        ##draw ground##
+        ###############
+        cv.rectangle(bg, (width, ground_level), (0, height), (70, 180, 75), -1)
         return self.img
-    
-    
-    
-################        
+################  
+
+
+
+
+      
     
 
 #################
 ##display image##
 #################
-img = Tree(bg, 450).draw()
-
-###############
-##draw ground##
-###############
-cv.rectangle(bg, (width, ground_level), (0, height), green, -1)
+for i in range(n_trees):
+    img = Tree(bg).draw()
 
 ##############################
 ##show in individual windows##
