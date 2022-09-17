@@ -64,10 +64,28 @@ bg = np.zeros((height, width, 3), dtype = np.uint8)
 cv.rectangle(bg, (width, 0), (0, ground_level), (225, 225, 95), -1)
 cv.rectangle(bg, (width, ground_level), (0, height), green, -1)
 ################
-#YOUR CODE HERE#
+class Tree(object):
+    def __init__(self, image, location):
+        self.img = image
+        self.loc =location
+        self.ht = 300
+        self.radius = 100
+    def draw(self):
+        #trunk=> cv.line(image, start_point, end_point, color, thickness) 
+        cv.line(self.img, (self.loc, ground_level), (self.loc, ground_level-self.ht), brown, 40)
+        cv.line(self.img, (self.loc, ground_level-self.ht + 150), (self.loc-90, ground_level-self.ht + self.radius-40), brown, 10)
+        cv.line(self.img, (self.loc, ground_level-self.ht + 150), (self.loc+90, ground_level-self.ht + self.radius-40), brown, 10)
+        #leafs=> cv.circle(image, center_coordinates, radius, color, thickness)
+        cv.circle(self.img, (self.loc, ground_level-self.ht), self.radius, green, -1)
+        cv.circle(self.img, (self.loc-90, ground_level-self.ht + self.radius-40), self.radius-40, green, -1)
+        cv.circle(self.img, (self.loc+90, ground_level-self.ht + self.radius-40), self.radius-40, green, -1)
+        return self.img
+        
+    
 ################
 
 #DISPLAY IMAGE
+img = Tree(bg, 450).draw()
 cv.imshow('forest of objects', bg)
 
 cv.waitKey(0)
